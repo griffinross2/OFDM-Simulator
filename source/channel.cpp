@@ -1,5 +1,6 @@
 #include "channel.h"
 #include <random>
+#include "tracy/Tracy.hpp"
 
 Channel::Channel(double tx_power_dbm, double tx_gain_db, double rx_gain_db, double dist_km, double fc, double bw)
     : tx_power_dbm(tx_power_dbm), tx_gain_db(tx_gain_db), rx_gain_db(rx_gain_db), dist_km(dist_km), fc(fc), bw(bw)
@@ -29,6 +30,7 @@ Channel::~Channel()
 
 double Channel::apply_channel(double signal)
 {
+    ZoneScoped;
 
     // Generate noise voltage
     double noise = dist(gen);

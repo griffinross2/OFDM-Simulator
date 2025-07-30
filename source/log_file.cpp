@@ -2,6 +2,7 @@
 #include <stdexcept>
 #include <cstring>
 #include <cstdarg>
+#include "tracy/Tracy.hpp"
 
 FileManager::FileManager()
 {
@@ -22,6 +23,8 @@ FileManager::~FileManager()
 
 void FileManager::write_log(const char *filename, const char *format, ...)
 {
+    ZoneScoped;
+
     va_list args;
     va_start(args, format);
 

@@ -17,6 +17,8 @@ public:
     void track(Transmitter &transmitter, uint8_t *input, int input_len_bits);
 
 private:
+    std::complex<double> get_baseband_sample(double sample, double time); // Convert sample to baseband
+
     Channel *channel;                       // Pointer to the channel object
     double fc;                              // Carrier frequency
     double bw;                              // Bandwidth
@@ -25,8 +27,8 @@ private:
     int num_subcarriers;                    // Number of subcarriers
     std::vector<int> data_locs;             // Data subcarrier locations
     std::vector<int> pilot_locs;            // Pilot subcarrier locations
-    Iir::Butterworth::LowPass<10> i_filter; // FIR filter for signal processing (I)
-    Iir::Butterworth::LowPass<10> q_filter; // FIR filter for signal processing (Q)
+    Iir::Butterworth::LowPass<5> i_filter; // FIR filter for signal processing (I)
+    Iir::Butterworth::LowPass<5> q_filter; // FIR filter for signal processing (Q)
     double gain = 10000.0;                  // Current gain of the receiver
     double gain_int = 10000.0;              // Integral gain for AGC
     std::queue<int> sample_mag;             // Queue to store the magnitude of samples for gain adjustment

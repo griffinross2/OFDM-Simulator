@@ -14,6 +14,9 @@ file(GLOB SOURCES
 
 find_package(Gnuradio "3.10.5" REQUIRED COMPONENTS runtime fft filter)
 find_package(iir REQUIRED)
+find_package(Tracy REQUIRED)
+
+# add_definitions(-DTRACY_ENABLE)
 
 add_executable(ofdm ${SOURCES})
 
@@ -23,4 +26,5 @@ target_link_libraries(ofdm PRIVATE
     gnuradio::gnuradio-fft 
     gnuradio::gnuradio-filter
     iir::iir
+    Tracy::TracyClient
 )

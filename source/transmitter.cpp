@@ -3,6 +3,7 @@
 #include "qam.h"
 #include <cmath>
 #include "log_file.h"
+#include "tracy/Tracy.hpp"
 
 static FileManager s_log_file_manager;
 
@@ -20,6 +21,8 @@ Transmitter::~Transmitter()
 
 double Transmitter::get_signal(uint8_t *input, int input_len_bits, double time)
 {
+    ZoneScoped;
+
     // Determine the number of the OFDM block corresponding to the desired sample timestamp
     int block_number = static_cast<int>(time * bw / num_subcarriers);
 
@@ -64,7 +67,7 @@ double Transmitter::get_signal(uint8_t *input, int input_len_bits, double time)
     double i_part = ofdm_block[sample_index].real() * std::cos(2 * M_PI * fc * time);
     double q_part = ofdm_block[sample_index].imag() * -1 * std::sin(2 * M_PI * fc * time);
 
-    s_log_file_manager.write_log("transmitter.log", "%g,%g\n", time, i_part + q_part);
+    // s_log_file_manager.write_log("transmitter.log", "%g,%g\n", time, i_part + q_part);
 
     return i_part + q_part;
 }

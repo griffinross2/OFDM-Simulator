@@ -2,6 +2,7 @@
 
 #include <fftw3.h>
 #include "log_file.h"
+#include "tracy/Tracy.hpp"
 
 FileManager g_log_file_manager;
 
@@ -9,6 +10,8 @@ namespace ofdm
 {
     int modulate(std::complex<double> *input, std::complex<double> *output, int num_subcarriers, std::vector<int> &data_locs, std::vector<int> &pilot_locs, std::complex<double> pilot_value)
     {
+        ZoneScoped;
+
         if (!input || !output || num_subcarriers <= 0)
         {
             throw std::invalid_argument("ofdm::modulate: Invalid input or output buffer or number of subcarriers!");
@@ -69,6 +72,7 @@ namespace ofdm
 
     int demodulate(std::complex<double> *input, std::complex<double> *output_data, std::complex<double> *output_pilot, int num_subcarriers, std::vector<int> &data_locs, std::vector<int> &pilot_locs, std::complex<double> pilot_value)
     {
+        ZoneScoped;
         if (!input || !output_data || !output_pilot || num_subcarriers <= 0)
         {
             throw std::invalid_argument("ofdm::demodulate: Invalid input or output buffer or number of subcarriers!");

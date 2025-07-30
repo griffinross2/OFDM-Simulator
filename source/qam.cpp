@@ -1,7 +1,10 @@
 #include "qam.h"
+#include "tracy/Tracy.hpp"
 
 int qam::modulate(modulation_t mod_type, uint8_t *input, std::complex<double> *output, int input_len_bits)
 {
+    ZoneScoped;
+
     // Check for valid input
     if (mod_type < BPSK || mod_type > QAM16)
     {
