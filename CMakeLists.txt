@@ -1,30 +1,36 @@
+cmake_minimum_required(VERSION 3.26)
+
+include(FetchContent)
+
 project(OFDM)
 
-cmake_minimum_required(VERSION 3.10)
-
 set(CMAKE_CXX_STANDARD 23)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-set(SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR})
-file(GLOB SOURCES 
-    ${SOURCE_DIR} "source/*.h"    
-    ${SOURCE_DIR} "source/*.cpp"
-    ${SOURCE_DIR} "source/tests/*.h"
-    ${SOURCE_DIR} "source/tests/*.cpp"
+add_executable(OFDM)
+
+include_directories("${CMAKE_SOURCE_DIR}/include")
+
+add_subdirectory("${CMAKE_SOURCE_DIR}/source")
+
+# Matplot++
+FetchContent_Declare(
+    matplotplusplus
+    GIT_REPOSITORY https://github.com/alandefreitas/matplotplusplus.git
+    GIT_TAG v1.2.2
 )
 
-find_package(Gnuradio "3.10.5" REQUIRED COMPONENTS runtime fft filter)
-find_package(iir REQUIRED)
-find_package(Tracy REQUIRED)
+FetchContent_MakeAvailable(matplotplusplus)
 
-# add_definitions(-DTRACY_ENABLE)
-
-add_executable(ofdm ${SOURCES})
-
-target_link_libraries(ofdm PRIVATE 
-    fftw3
-    gnuradio::gnuradio-runtime 
-    gnuradio::gnuradio-fft 
-    gnuradio::gnuradio-filter
-    iir::iir
-    Tracy::TracyClient
+FetchContent_GetProperties(matplotplusplus
+    POPULATED matplotplusplus_POPULATED
+    SOURCE_DIR matplotplusplus_SOURCE_DIR
+    BINARY_DIR matplotplusplus_BINARY_DIR
 )
+
+# Link libraries
+target_link_libraries(${PROJECT_NAME} PUBLIC
+    matplot
+)
+
+target_compile_options(matplot PRIVATE /wd4834)
